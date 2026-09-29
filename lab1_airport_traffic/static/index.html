@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traffic Forecast · Lab 1</title>
+<style>
+  :root { --bg:#fcfcfb; --card:#ffffff; --ink:#0b0b0b; --muted:#52514e; --line:#e6e5e0; --accent:#2a78d6; --bad:#e34948; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1a1a19; --card:#242422; --ink:#ffffff; --muted:#c3c2b7; --line:#3a3a37; --accent:#3987e5; --bad:#e66767; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:24px 16px 48px; }
+  h1 { font-size:22px; margin:0 0 4px; } p.sub { color:var(--muted); margin:0 0 20px; }
+  form, .result { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px 16px; }
+  label { display:block; font-size:13px; color:var(--muted); margin-bottom:4px; }
+  input { width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--ink); font:inherit; }
+  button { margin-top:16px; padding:9px 16px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; font:inherit; cursor:pointer; }
+  .result { margin-top:16px; display:none; }
+  .big { font-size:40px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .muted { color:var(--muted); font-size:13px; }
+  pre { background:var(--bg); border:1px solid var(--line); padding:10px; border-radius:6px; overflow:auto; font-size:12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Next-day traffic forecast</h1>
+  <p class="sub" id="sub">Loading the model…</p>
+  <form id="f">
+    <div><label>Day to forecast</label><input name="day" type="date" value="2025-12-01" required></div>
+    <p class="muted" style="margin:14px 0 6px">Total IFR movements of the previous days (oldest first):</p>
+    <div class="grid" id="past"></div>
+    <button type="submit">Get forecast</button>
+  </form>
+  <div class="result" id="r">
+    <div class="big" id="v">–</div>
+    <div class="muted" id="meta"></div>
+    <details style="margin-top:12px"><summary class="muted">Raw request / response</summary><pre id="raw"></pre></details>
+  </div>
+</main>
+<script>
+const example = [512, 545, 548, 551, 532, 461, 530, 530, 548, 540, 552, 532, 470, 520, 540, 530, 545, 540, 530, 470, 520, 540, 530, 545, 540, 530, 470, 520];
+let lookback = 7;
+fetch("/model").then(r => r.json()).then(card => {
+  lookback = card.lookback;
+  document.getElementById("sub").textContent = card.name + " — uses the last " + lookback + " days and the day of the week. Training demo, not for operational use.";
+  const box = document.getElementById("past");
+  for (let i = 0; i < lookback; i++) {
+    const k = lookback - i;
+    const label = k === 1 ? "yesterday" : k + " days before";
+    box.insertAdjacentHTML("beforeend", '<div><label>' + label + '</label><input name="p' + i + '" type="number" step="1" value="' + example[example.length - lookback + i] + '" required></div>');
+  }
+});
+document.getElementById("f").onsubmit = async (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target));
+  const body = { day: d.day, past_traffic: [] };
+  for (let i = 0; i < lookback; i++) body.past_traffic.push(parseFloat(d["p" + i]));
+  const res = await fetch("/forecast", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+  const out = await res.json();
+  document.getElementById("r").style.display = "block";
+  document.getElementById("raw").textContent = "REQUEST\n" + JSON.stringify(body, null, 2) + "\n\nRESPONSE (" + res.status + ")\n" + JSON.stringify(out, null, 2);
+  if (!res.ok) { document.getElementById("v").textContent = "Invalid input"; document.getElementById("meta").textContent = "see raw response"; return; }
+  document.getElementById("v").textContent = Math.round(out.forecast_flights) + " flights";
+  const base = out.baseline_same_weekday_last_week === null ? "n/a" : Math.round(out.baseline_same_weekday_last_week);
+  document.getElementById("meta").textContent = "forecast for " + out.day + " · baseline 'same weekday last week': " + base + " · model " + out.model_version;
+};
+</script>
+</body>
+</html>

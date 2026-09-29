@@ -1,0 +1,14 @@
+# EUROCONTROL AI Lab — Python dependencies (tested with Python 3.11, September 2026)
+# PyTorch CPU build: install it FIRST with the dedicated index (see SETUP_IT guide), then:  pip install -r requirements.txt
+torch==2.14.0
+numpy==2.4.4
+pandas==3.0.2
+matplotlib==3.10.9
+seaborn==0.13.2
+scikit-learn==1.8.0
+jupyterlab==4.6.4
+ipykernel==7.3.0
+fastapi==0.141.1
+uvicorn==0.46.0
+pydantic==2.13.3
+requests==2.33.1

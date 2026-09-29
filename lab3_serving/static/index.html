@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Low-Vis Nowcast · LIMC</title>
+<style>
+  :root { --bg:#fcfcfb; --card:#ffffff; --ink:#0b0b0b; --muted:#52514e; --line:#e6e5e0; --accent:#2a78d6; --alert:#e34948; --ok:#008300; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1a1a19; --card:#242422; --ink:#ffffff; --muted:#c3c2b7; --line:#3a3a37; --accent:#3987e5; --alert:#e66767; --ok:#3aa63a; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:24px 16px 48px; }
+  h1 { font-size:22px; margin:0 0 4px; } p.sub { color:var(--muted); margin:0 0 20px; }
+  form, .result { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px 16px; }
+  label { display:block; font-size:13px; color:var(--muted); margin-bottom:4px; }
+  input { width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--ink); font:inherit; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  button { padding:9px 16px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; font:inherit; cursor:pointer; }
+  button.secondary { background:transparent; color:var(--accent); }
+  .result { margin-top:16px; display:none; }
+  .prob { font-size:40px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .bar { height:10px; background:var(--line); border-radius:5px; overflow:hidden; margin:8px 0; position:relative; }
+  .bar > span { display:block; height:100%; background:var(--accent); }
+  .bar > i { position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--ink); }
+  .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-weight:600; font-size:13px; }
+  .alert { background:color-mix(in srgb, var(--alert) 18%, transparent); color:var(--alert); }
+  .clear { background:color-mix(in srgb, var(--ok) 18%, transparent); color:var(--ok); }
+  pre { background:var(--bg); border:1px solid var(--line); padding:10px; border-radius:6px; overflow:auto; font-size:12px; }
+  .muted { color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Low-Visibility nowcast · Milano Malpensa (LIMC)</h1>
+  <p class="sub">Probability of visibility &lt; 1 500 m within the next 3 hours: a weather-based <b>proxy</b> for Low-Visibility Procedures, not a forecast of LVP being declared. Training demo, EUROCONTROL AI Lab. Not for operational use.</p>
+
+  <form id="f">
+    <div class="grid">
+      <div><label>Observation time (UTC)</label><input name="time" type="datetime-local" value="2025-01-06T05:50" required></div>
+      <div><label>Temperature (°C)</label><input name="temperature_c" type="number" step="0.1" value="1" required></div>
+      <div><label>Dew point (°C)</label><input name="dewpoint_c" type="number" step="0.1" value="0" required></div>
+      <div><label>Wind direction (deg, empty = calm/VRB)</label><input name="wind_dir_deg" type="number" step="10"></div>
+      <div><label>Wind speed (kt)</label><input name="wind_speed_kt" type="number" step="1" value="2" required></div>
+      <div><label>Visibility (m, 9999 = ≥10 km)</label><input name="visibility_m" type="number" step="100" value="3000" required></div>
+      <div><label>QNH (hPa)</label><input name="qnh_hpa" type="number" step="1" value="1025" required></div>
+    </div>
+    <div class="row">
+      <button type="submit">Get nowcast</button>
+      <button type="button" class="secondary" id="fog">Example: winter night</button>
+      <button type="button" class="secondary" id="sun">Example: summer afternoon</button>
+    </div>
+  </form>
+
+  <div class="result" id="r">
+    <div class="prob" id="p">–</div>
+    <div class="bar"><span id="pb" style="width:0"></span><i id="th"></i></div>
+    <div><span class="badge" id="b"></span> <span class="muted" id="meta"></span></div>
+    <details style="margin-top:12px"><summary class="muted">Raw request / response</summary><pre id="raw"></pre></details>
+  </div>
+</main>
+<script>
+const f = document.getElementById("f");
+function setVals(v){ for (const [k,x] of Object.entries(v)) f.elements[k].value = x; }
+document.getElementById("fog").onclick = () => setVals({time:"2025-01-06T05:50", temperature_c:1, dewpoint_c:0.5, wind_dir_deg:"", wind_speed_kt:1, visibility_m:2000, qnh_hpa:1028});
+document.getElementById("sun").onclick = () => setVals({time:"2025-07-15T14:50", temperature_c:31, dewpoint_c:17, wind_dir_deg:200, wind_speed_kt:8, visibility_m:9999, qnh_hpa:1014});
+f.onsubmit = async (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(f));
+  const body = { time: d.time + ":00" };
+  for (const k of ["temperature_c","dewpoint_c","wind_speed_kt","visibility_m","qnh_hpa"]) body[k] = parseFloat(d[k]);
+  body.wind_dir_deg = d.wind_dir_deg === "" ? null : parseFloat(d.wind_dir_deg);
+  const res = await fetch("/predict", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+  const out = await res.json();
+  document.getElementById("r").style.display = "block";
+  document.getElementById("raw").textContent = "REQUEST\n" + JSON.stringify(body, null, 2) + "\n\nRESPONSE (" + res.status + ")\n" + JSON.stringify(out, null, 2);
+  const b = document.getElementById("b");
+  if (!res.ok) { document.getElementById("p").textContent = "Invalid input"; b.textContent = "HTTP " + res.status; b.className = "badge alert"; document.getElementById("meta").textContent = "see raw response"; return; }
+  const pct = (out.probability * 100);
+  document.getElementById("p").textContent = pct.toFixed(1) + " %";
+  document.getElementById("pb").style.width = pct + "%";
+  document.getElementById("th").style.left = (out.threshold * 100) + "%";
+  b.textContent = out.alert ? "LOW-VIS ALERT" : "no alert"; b.className = "badge " + (out.alert ? "alert" : "clear");
+  document.getElementById("meta").textContent = "threshold " + out.threshold.toFixed(2) + " · model " + out.model_version;
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# macOS / Office / Jupyter clutter
+.DS_Store
+~$*
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Created when participants run the notebooks (trained models)
+artifacts/
+
+# Local Python environments
+.venv/
+venv/
