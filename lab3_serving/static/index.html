@@ -70,7 +70,7 @@ f.onsubmit = async (e) => {
   const body = { time: d.time + ":00" };
   for (const k of ["temperature_c","dewpoint_c","wind_speed_kt","visibility_m","qnh_hpa"]) body[k] = parseFloat(d[k]);
   body.wind_dir_deg = d.wind_dir_deg === "" ? null : parseFloat(d.wind_dir_deg);
-  const res = await fetch("/predict", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+  const res = await fetch("predict", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
   const out = await res.json();
   document.getElementById("r").style.display = "block";
   document.getElementById("raw").textContent = "REQUEST\n" + JSON.stringify(body, null, 2) + "\n\nRESPONSE (" + res.status + ")\n" + JSON.stringify(out, null, 2);

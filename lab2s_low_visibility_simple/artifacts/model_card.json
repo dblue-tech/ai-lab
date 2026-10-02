@@ -1,0 +1,48 @@
+{
+  "name": "Low-visibility nowcast LIMC, simplified (LVP proxy)",
+  "version": "1.0.0",
+  "task": "P(visibility < 1500 m exactly 3 hours after the METAR)",
+  "target_note": "Proxy for LVP, derived from METAR visibility only; real LVP depend on RVR, ceiling and local procedures.",
+  "features": [
+    "vis_m",
+    "spread_c",
+    "rh",
+    "wind_kt",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "scaler_mean": [
+    9030.6591796875,
+    6.185962200164795,
+    70.99028778076172,
+    4.678475379943848,
+    0.0013888671528548002,
+    -0.0028548906557261944,
+    -0.004521746654063463,
+    -0.0005266987136565149
+  ],
+  "scaler_std": [
+    2301.3330078125,
+    5.865516185760498,
+    22.347047805786133,
+    2.7189877033233643,
+    0.7078880667686462,
+    0.7063156962394714,
+    0.705880343914032,
+    0.7083247303962708
+  ],
+  "hidden": 16,
+  "pos_weight": 3.0,
+  "threshold": 0.5,
+  "test_2025": {
+    "precision": 0.26,
+    "recall": 0.46,
+    "hits": 63,
+    "false alarms": 176,
+    "misses": 75,
+    "onsets caught": "26 of 78"
+  },
+  "intended_use": "Training exercise only. Not for operational use."
+}

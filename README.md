@@ -1,14 +1,16 @@
 # EUROCONTROL AI Lab: course package
 
-**Version of 28 September 2026.** If your folder contains other files than those listed under *Contents*, they are from an older version and can be deleted.
+**Version of 2 October 2026.** If your folder contains other files than those listed under *Contents*, they are from an older version and can be deleted.
 
-Hands-on PyTorch exercises on real aviation data. Everything runs locally: no cloud services, accounts or internet access during the session.
+Hands-on PyTorch exercises on real aviation data. The same notebooks run in two ways:
+- **Google Colab** (nothing to install): participants only need a web browser, internet access and a Google account. See *Running in Google Colab* below.
+- **Locally on the lab PCs** (no cloud, no accounts, no internet during the session): see *Quick start* below.
 
 ## Contents
 ```
 README.md                         this file
 requirements.txt                  Python packages (pinned versions)
-check_setup.py                    readiness check for each workstation
+check_setup.py                    readiness check for each workstation (local installation only)
 data/                             datasets (airport_traffic_2019/2023/2024/2025.csv, LIMC.csv)
 docs/                             AI_Lab_Exercises_Description.docx, AI_Lab_IT_Setup_Guide.docx, AI_Lab_Data_Description.docx
 lab1_airport_traffic/
@@ -17,6 +19,7 @@ lab1_airport_traffic/
     Lab1_part3_serve.ipynb                       Exercise 1, Part 3: the model as a local service
     solutions/Lab1_airport_traffic_SOLUTIONS.ipynb, solutions/Lab1_part2_inside_the_model_SOLUTIONS.ipynb
     traffic_core.py, serve_traffic.py, static/index.html   code used by Parts 2 and 3
+    artifacts/                                   the trained model (re-created by Part 1)
 lab2_low_visibility/
     Lab2_low_visibility.ipynb                    Exercise 2, participant notebook
     solutions/Lab2_low_visibility_SOLUTIONS.ipynb    same notebook with the optional coding challenges solved
@@ -24,12 +27,14 @@ lab3_serving/
     Lab3_part1_train_and_save.ipynb              Exercise 3, part 1
     Lab3_part2_run_the_service.ipynb             Exercise 3, part 2
     lvp_core.py, serve.py, static/index.html     code used by Exercise 3
+    artifacts/                                   the trained model (re-created by Part 1)
 lab2s_low_visibility_simple/                     SIMPLIFIED TRACK (alternative to Exercises 2 + 3)
     2S-1_train.ipynb                             train the simplified model (run first: it saves the model)
     2S-2_inside_the_model.ipynb                  open the black box + explainability
     2S-3_serve.ipynb                             run the model as a local service
     solutions/2S-1_train_SOLUTIONS.ipynb, solutions/2S-2_inside_the_model_SOLUTIONS.ipynb
     lowvis_core.py, serve_simple.py, static/index.html   code used by the three notebooks
+    artifacts/                                   the trained model (re-created by 2S-1)
 ```
 
 | Exercise | Topic | Time |
@@ -44,7 +49,34 @@ lab2s_low_visibility_simple/                     SIMPLIFIED TRACK (alternative t
 - The notebooks are saved with their outputs, so the results can be read even before running them. Participants keep the notebooks.
 - **Optional coding challenges (Exercise 1 Parts 1–2, Exercise 2, 2S-1 and 2S-2):** a few cells per notebook marked **🧑‍💻**, for participants who want to write code. They are switched off (every line starts with `#`), contain `___` blanks and hints, and the rest of the notebook does not depend on them. Solutions are in each lab's `solutions/` folder.
 
-## Quick start
+## Running in Google Colab
+Requirements on the classroom PCs: a web browser and internet access to `colab.research.google.com`, `github.com` and `googleusercontent.com`. Each participant signs in with a Google account (provided by the instructor).
+
+1. Open a notebook with its link below (or the **Open in Colab** badge at the top of each notebook).
+2. Run the first code cell: it copies this repository (data, code, trained models) into the Colab machine and moves into the notebook's folder. On a lab PC the same cell does nothing.
+3. Run the rest of the notebook from top to bottom, as on a PC.
+4. To keep the notebook with your results: *File → Save a copy in Drive*. Without this, changes are lost when the Colab session ends.
+
+Each notebook runs on its own Colab machine, so Parts 2 and 3 cannot see a model trained in Part 1: they use the ready-trained copy in `artifacts/` (the same model Part 1 produces). In the serving notebooks, the service runs on the Colab machine and the notebook shows a special link to open its documentation and web form.
+
+| Notebook | Open |
+|---|---|
+| 1 · Part 1 — train | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_airport_traffic.ipynb) |
+| 1 · Part 2 — inside the model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part2_inside_the_model.ipynb) |
+| 1 · Part 3 — serve | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part3_serve.ipynb) |
+| 2 — low visibility | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/Lab2_low_visibility.ipynb) |
+| 3 · Part 1 — train and save | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part1_train_and_save.ipynb) |
+| 3 · Part 2 — run the service | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part2_run_the_service.ipynb) |
+| 2S-1 — train | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-1_train.ipynb) |
+| 2S-2 — inside the model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-2_inside_the_model.ipynb) |
+| 2S-3 — serve | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-3_serve.ipynb) |
+| Solutions: 1 · Part 1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_airport_traffic_SOLUTIONS.ipynb) |
+| Solutions: 1 · Part 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_part2_inside_the_model_SOLUTIONS.ipynb) |
+| Solutions: 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/solutions/Lab2_low_visibility_SOLUTIONS.ipynb) |
+| Solutions: 2S-1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-1_train_SOLUTIONS.ipynb) |
+| Solutions: 2S-2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-2_inside_the_model_SOLUTIONS.ipynb) |
+
+## Quick start (local installation)
 Full instructions for Windows, macOS, Linux and conda are in `docs/AI_Lab_IT_Setup_Guide.docx`.
 
 **venv on macOS or Linux** (on Windows, activate with `.venv\Scripts\activate`):
@@ -67,7 +99,7 @@ python check_setup.py        # must print READY
 jupyter lab
 ```
 
-In Exercise 1, run **Part 1** first (section 8.1 saves the model in `lab1_airport_traffic/artifacts/`), then Parts 2 and 3.
+In Exercise 1, run **Part 1** first (section 8.1 saves the model in `lab1_airport_traffic/artifacts/`), then Parts 2 and 3. A ready-trained copy of each model is included in `artifacts/`, so Parts 2 and 3 also work on their own.
 In Exercise 3, run **Part 1** first: it creates `lab3_serving/artifacts/` with the saved model. Part 2 then starts the service by itself.
 In the simplified track, run **2S-1** first: it creates `lab2s_low_visibility_simple/artifacts/`, used by 2S-2 and 2S-3.
 

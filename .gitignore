@@ -5,8 +5,6 @@
 __pycache__/
 *.pyc
 
-# Created when participants run the notebooks (trained models)
-artifacts/
 
 # Local Python environments
 .venv/

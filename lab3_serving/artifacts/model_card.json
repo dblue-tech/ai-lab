@@ -1,0 +1,70 @@
+{
+  "name": "Low-visibility nowcast LIMC (LVP proxy)",
+  "version": "1.0.0",
+  "created_utc": "2026-10-02T09:47:56+00:00",
+  "task": "P(visibility < 1500 m in any of the next 3 hourly METARs)",
+  "target_note": "Proxy for Low-Visibility Procedures: derived from METAR visibility only. Real LVP depend on RVR, cloud ceiling and local procedures; no LVP declaration data was used.",
+  "airport": "LIMC",
+  "training_data": {
+    "source": "Iowa Environmental Mesonet METAR archive",
+    "train": "2020-2023",
+    "validation": "2024",
+    "test": "2025"
+  },
+  "features": [
+    "temp_c",
+    "spread_c",
+    "rh",
+    "wind_east",
+    "wind_north",
+    "qnh_hpa",
+    "vis_m",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "scaler_mean": [
+    13.985548973083496,
+    6.191730499267578,
+    70.98208618164062,
+    0.3082016110420227,
+    1.8217982053756714,
+    1016.2053833007812,
+    9032.6572265625,
+    0.0025875475257635117,
+    -0.005853959359228611,
+    -0.004646406043320894,
+    0.00010570056474534795
+  ],
+  "scaler_std": [
+    8.931926727294922,
+    5.866754055023193,
+    22.334680557250977,
+    3.0685086250305176,
+    4.050934314727783,
+    7.9064130783081055,
+    2298.23291015625,
+    0.7087705731391907,
+    0.7054522633552551,
+    0.7060602307319641,
+    0.70819091796875
+  ],
+  "threshold": 0.23,
+  "threshold_rule": "highest threshold with recall >= 0.80 on validation",
+  "hyperparameters": {
+    "hidden": 32,
+    "dropout": 0.1,
+    "learning_rate": 0.001,
+    "epochs": 20,
+    "batch_size": 256,
+    "pos_weight": 3.0
+  },
+  "metrics": {
+    "validation_pr_auc": 0.6903468941214733,
+    "test_pr_auc": 0.5226355815375487,
+    "test_precision": 0.33137254901960783,
+    "test_recall": 0.7752293577981652
+  },
+  "intended_use": "Training exercise only. Not for operational use."
+}

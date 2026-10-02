@@ -41,7 +41,7 @@
 <script>
 const example = [512, 545, 548, 551, 532, 461, 530, 530, 548, 540, 552, 532, 470, 520, 540, 530, 545, 540, 530, 470, 520, 540, 530, 545, 540, 530, 470, 520];
 let lookback = 7;
-fetch("/model").then(r => r.json()).then(card => {
+fetch("model").then(r => r.json()).then(card => {
   lookback = card.lookback;
   document.getElementById("sub").textContent = card.name + " — uses the last " + lookback + " days and the day of the week. Training demo, not for operational use.";
   const box = document.getElementById("past");
@@ -56,7 +56,7 @@ document.getElementById("f").onsubmit = async (e) => {
   const d = Object.fromEntries(new FormData(e.target));
   const body = { day: d.day, past_traffic: [] };
   for (let i = 0; i < lookback; i++) body.past_traffic.push(parseFloat(d["p" + i]));
-  const res = await fetch("/forecast", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+  const res = await fetch("forecast", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
   const out = await res.json();
   document.getElementById("r").style.display = "block";
   document.getElementById("raw").textContent = "REQUEST\n" + JSON.stringify(body, null, 2) + "\n\nRESPONSE (" + res.status + ")\n" + JSON.stringify(out, null, 2);
