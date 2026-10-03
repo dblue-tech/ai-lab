@@ -9,3 +9,6 @@ __pycache__/
 # Local Python environments
 .venv/
 venv/
+
+# Copies saved by the Claude app
+Claude outputs/

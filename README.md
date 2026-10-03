@@ -1,6 +1,6 @@
 # EUROCONTROL AI Lab: course package
 
-**Version of 2 October 2026.** If your folder contains other files than those listed under *Contents*, they are from an older version and can be deleted.
+**Version of 3 October 2026.** If your folder contains other files than those listed under *Contents*, they are from an older version and can be deleted.
 
 Hands-on PyTorch exercises on real aviation data. The same notebooks run in two ways:
 - **Google Colab** (nothing to install): participants only need a web browser, internet access and a Google account. See *Running in Google Colab* below.
@@ -12,7 +12,8 @@ README.md                         this file
 requirements.txt                  Python packages (pinned versions)
 check_setup.py                    readiness check for each workstation (local installation only)
 data/                             datasets (airport_traffic_2019/2023/2024/2025.csv, LIMC.csv)
-docs/                             AI_Lab_Exercises_Description.docx, AI_Lab_IT_Setup_Guide.docx, AI_Lab_Data_Description.docx
+docs/                             AI_Lab_Exercises_Description.docx, AI_Lab_IT_Setup_Guide.docx, AI_Lab_Data_Description.docx,
+                                  AI_Lab_Colab_Instructions.docx (participant handout for Google Colab, with all links)
 lab1_airport_traffic/
     Lab1_airport_traffic.ipynb                   Exercise 1, Part 1: train (run first: section 8.1 saves the model)
     Lab1_part2_inside_the_model.ipynb            Exercise 1, Part 2: open the black box + explainability
@@ -39,10 +40,10 @@ lab2s_low_visibility_simple/                     SIMPLIFIED TRACK (alternative t
 
 | Exercise | Topic | Time |
 |---|---|---|
-| **1** | Forecasting European airport traffic: time-series regression on EUROCONTROL AIU data (Brussels, EBBR) with hyperparameter experiments · Part 2 inside the model · Part 3 serving | ~2 h + 50 min + 45 min |
+| **1** | Forecasting European airport traffic: time-series regression on EUROCONTROL AIU data (Brussels, EBBR) with hyperparameter experiments · Part 2 inside the model (incl. neuron activations) · Part 3 serving | ~2 h + 1 h + 45 min |
 | **2** | Nowcasting low visibility at Milano Malpensa from METAR: rare-event classification. The target (visibility < 1 500 m within 3 h) is a *proxy* for LVP, since the data holds no LVP declarations | ~2 h |
 | **3** | End-to-end: train, test and save the model with a model card, then run it as a local FastAPI service and test it | ~1 h 40 |
-| **2S** | *Simplified alternative to 2 + 3*, same METAR data: **2S-1** train (visibility < 1 500 m in 3 h, 8 inputs, precision/recall, class weight) · **2S-2** inside the model (network drawing, weights, one prediction by hand, explainability task) · **2S-3** local service | ~1 h 15 + 50 min + 45 min |
+| **2S** | *Simplified alternative to 2 + 3*, same METAR data: **2S-1** train (visibility < 1 500 m in 3 h, 8 inputs, precision/recall, class weight) · **2S-2** inside the model (network drawing, weights, one prediction by hand, neuron activations, explainability task) · **2S-3** local service | ~1 h 15 + 1 h + 45 min |
 
 ## How the notebooks work
 - Each exercise is a complete, ready-to-run notebook. **No coding is required.** Participants run the cells from top to bottom (Shift + Enter). Every line of code has a plain-language comment, and every plot is followed by a short reading.
@@ -52,29 +53,29 @@ lab2s_low_visibility_simple/                     SIMPLIFIED TRACK (alternative t
 ## Running in Google Colab
 Requirements on the classroom PCs: a web browser and internet access to `colab.research.google.com`, `github.com` and `googleusercontent.com`. Each participant signs in with a Google account (provided by the instructor).
 
-1. Open a notebook with its link below (or the **Open in Colab** badge at the top of each notebook).
+1. Open a notebook with its link below (or the **Open in Colab** badge at the top of each notebook). Every link has the form `https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/<path of the notebook>`. A printable handout with all the links is in `docs/AI_Lab_Colab_Instructions.docx`.
 2. Run the first code cell: it copies this repository (data, code, trained models) into the Colab machine and moves into the notebook's folder. On a lab PC the same cell does nothing.
 3. Run the rest of the notebook from top to bottom, as on a PC.
 4. To keep the notebook with your results: *File → Save a copy in Drive*. Without this, changes are lost when the Colab session ends.
 
 Each notebook runs on its own Colab machine, so Parts 2 and 3 cannot see a model trained in Part 1: they use the ready-trained copy in `artifacts/` (the same model Part 1 produces). In the serving notebooks, the service runs on the Colab machine and the notebook shows a special link to open its documentation and web form.
 
-| Notebook | Open |
-|---|---|
-| 1 · Part 1 — train | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_airport_traffic.ipynb) |
-| 1 · Part 2 — inside the model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part2_inside_the_model.ipynb) |
-| 1 · Part 3 — serve | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part3_serve.ipynb) |
-| 2 — low visibility | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/Lab2_low_visibility.ipynb) |
-| 3 · Part 1 — train and save | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part1_train_and_save.ipynb) |
-| 3 · Part 2 — run the service | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part2_run_the_service.ipynb) |
-| 2S-1 — train | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-1_train.ipynb) |
-| 2S-2 — inside the model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-2_inside_the_model.ipynb) |
-| 2S-3 — serve | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-3_serve.ipynb) |
-| Solutions: 1 · Part 1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_airport_traffic_SOLUTIONS.ipynb) |
-| Solutions: 1 · Part 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_part2_inside_the_model_SOLUTIONS.ipynb) |
-| Solutions: 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/solutions/Lab2_low_visibility_SOLUTIONS.ipynb) |
-| Solutions: 2S-1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-1_train_SOLUTIONS.ipynb) |
-| Solutions: 2S-2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-2_inside_the_model_SOLUTIONS.ipynb) |
+| Notebook | Open | Full link |
+|---|---|---|
+| 1 · Part 1 — train | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_airport_traffic.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_airport_traffic.ipynb |
+| 1 · Part 2 — inside the model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part2_inside_the_model.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part2_inside_the_model.ipynb |
+| 1 · Part 3 — serve | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part3_serve.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/Lab1_part3_serve.ipynb |
+| 2 — low visibility | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/Lab2_low_visibility.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/Lab2_low_visibility.ipynb |
+| 3 · Part 1 — train and save | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part1_train_and_save.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part1_train_and_save.ipynb |
+| 3 · Part 2 — run the service | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part2_run_the_service.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab3_serving/Lab3_part2_run_the_service.ipynb |
+| 2S-1 — train | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-1_train.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-1_train.ipynb |
+| 2S-2 — inside the model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-2_inside_the_model.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-2_inside_the_model.ipynb |
+| 2S-3 — serve | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-3_serve.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/2S-3_serve.ipynb |
+| Solutions: 1 · Part 1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_airport_traffic_SOLUTIONS.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_airport_traffic_SOLUTIONS.ipynb |
+| Solutions: 1 · Part 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_part2_inside_the_model_SOLUTIONS.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab1_airport_traffic/solutions/Lab1_part2_inside_the_model_SOLUTIONS.ipynb |
+| Solutions: 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/solutions/Lab2_low_visibility_SOLUTIONS.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2_low_visibility/solutions/Lab2_low_visibility_SOLUTIONS.ipynb |
+| Solutions: 2S-1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-1_train_SOLUTIONS.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-1_train_SOLUTIONS.ipynb |
+| Solutions: 2S-2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-2_inside_the_model_SOLUTIONS.ipynb) | https://colab.research.google.com/github/dblue-tech/ai-lab/blob/main/lab2s_low_visibility_simple/solutions/2S-2_inside_the_model_SOLUTIONS.ipynb |
 
 ## Quick start (local installation)
 Full instructions for Windows, macOS, Linux and conda are in `docs/AI_Lab_IT_Setup_Guide.docx`.
