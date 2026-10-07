@@ -61,16 +61,15 @@ def make_examples(series, lookback):
 class TrafficMLP(nn.Module):                                      # the same network as in Lab 1, Part 1
     def __init__(self, n_inputs, hidden=32):
         super().__init__()                                        # standard first line of a PyTorch model
-        self.layers = nn.Sequential(                              # a chain of layers:
-            nn.Linear(n_inputs, hidden),                          #   layer 1
-            nn.ReLU(),                                            #   non-linearity
-            nn.Linear(hidden, hidden),                            #   layer 2
-            nn.ReLU(),                                            #   non-linearity
-            nn.Linear(hidden, 1),                                 #   output: one number
-        )                                                         # end of the chain
+        self.layer1 = nn.Linear(n_inputs, hidden)                 # layer 1: inputs -> hidden neurons
+        self.layer2 = nn.Linear(hidden, hidden)                   # layer 2: hidden -> hidden neurons
+        self.output = nn.Linear(hidden, 1)                        # output layer: hidden -> 1 number
+        self.relu = nn.ReLU()                                     # keeps positive values, sets negative ones to 0 (no weights)
 
     def forward(self, x):
-        return self.layers(x).squeeze(1)                          # one (scaled) forecast per example
+        h1 = self.relu(self.layer1(x))                            # activations of layer 1
+        h2 = self.relu(self.layer2(h1))                           # activations of layer 2
+        return self.output(h2).squeeze(1)                         # one (scaled) forecast per example
 
 
 def save_model(model, card, folder):
