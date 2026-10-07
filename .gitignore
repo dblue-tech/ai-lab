@@ -12,3 +12,6 @@ venv/
 
 # Copies saved by the Claude app
 Claude outputs/
+
+# Attempts table written by lab1_simplified/1S-1_train.ipynb
+my_attempts.csv
