@@ -1,10 +1,22 @@
 # EUROCONTROL AI Lab: course package
 
-**Version of 8 October 2026.** If your folder contains other files than those listed under *Contents*, they are from an older version and can be deleted.
+**Version of 14 October 2026.** If your folder contains other files than those listed under *Contents*, they are from an older version and can be deleted.
 
 Hands-on PyTorch exercises on real aviation data. The same notebooks run in two ways:
 - **Google Colab** (nothing to install): participants only need a web browser, internet access and a Google account. See *Running in Google Colab* below.
 - **Locally on the lab PCs** (no cloud, no accounts, no internet during the session): see *Quick start* below.
+
+## ⚖️ Training material — terms of use and attribution
+- **For training only.** The notebooks, the code, the data extracts and the trained models in this repository were made **for training purposes only**, for the AI-Lab for EUROCONTROL. They are **not** validated for operational use, and their forecasts must not support real operational decisions.
+- **Credit the authors when you reuse it.** If you use, share or adapt any part of this material **after the training or in any other context**, always quote the authors and state the **context and purpose it was originally made for**. Copy and paste this attribution:
+
+```
+Giuseppe Frau, Deep Blue (dblue.it) — "AI-Lab for EUROCONTROL": hands-on machine-learning exercises on aviation data, developed for training purposes only. https://github.com/dblue-tech/ai-lab
+```
+
+- **Credit the data sources too.** The airport traffic data come from the **EUROCONTROL Aviation Intelligence Unit** (https://ansperformance.eu/csv/) and the weather reports from the **Iowa Environmental Mesonet** ASOS/METAR archive (https://mesonet.agron.iastate.edu/request/download.phtml). See *Data* below.
+
+The same notice appears at the top of every notebook.
 
 ## Contents
 ```
@@ -120,4 +132,4 @@ In the simplified track, run **2S-1** first: it creates `lab2s_low_visibility_si
 - `airport_traffic_{2019,2023,2024,2025}.csv` comes from the EUROCONTROL Aviation Intelligence Unit (https://ansperformance.eu/csv/): daily IFR movements per airport.
 - `LIMC.csv` comes from the Iowa Environmental Mesonet ASOS/METAR archive (https://mesonet.agron.iastate.edu/request/download.phtml): METAR reports for Milano Malpensa, 2020–2025.
 
-All models are training artefacts, not for operational use.
+All models are training artefacts, not for operational use (see *Training material — terms of use and attribution* at the top).
